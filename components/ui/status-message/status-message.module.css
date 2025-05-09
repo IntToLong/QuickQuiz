@@ -1,0 +1,30 @@
+.error {
+	color: var(--color-red-dark);
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+	font-weight: 500;
+	margin-bottom: 25px;
+	animation: fadeIn 1s ease-out;
+}
+
+.warning {
+	color: var(--color-warning);
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+	font-weight: 500;
+	margin-bottom: 25px;
+	animation: fadeIn 2s ease-out;
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

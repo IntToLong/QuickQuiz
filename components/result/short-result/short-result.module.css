@@ -1,0 +1,12 @@
+.progress svg {
+	width: 50%;
+	height: 50%;
+}
+
+.buttons {
+	display: flex;
+	gap: 15px;
+	justify-content: space-evenly;
+	margin: 20px 0;
+}
+

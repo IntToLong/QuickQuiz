@@ -1,0 +1,18 @@
+.button {
+	appearance: none;
+	border: none;
+	background: transparent;
+	outline: none;
+	cursor: pointer;
+	user-select: none;
+}
+
+.button img:hover {
+	transform: rotate(90deg);
+	transition: 0.8s ease-out;
+	
+}
+
+.button:active {
+	transform: scale(1.1);
+}

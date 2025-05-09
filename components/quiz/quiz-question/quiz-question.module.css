@@ -1,0 +1,130 @@
+.question {
+	color: var(--color-text-light);
+	text-align: center;
+	border: 1px solid var(--color-teal-dark);
+	border-radius: 10px;
+	width: 70%;
+	margin: 20px auto;
+	padding: 20px;
+}
+
+.question h3 {
+	padding: 20px 10px;
+	font-weight: 500;
+	font-size: 1.5rem;
+	color: var(--color-text-light);
+}
+
+.question li {
+	text-align: center;
+	width: 70%;
+	margin: 10px auto;
+	padding: 20px 20px;
+	font-size: 1.2rem;
+	background: linear-gradient(45deg, #aad9d1, #aad9d1);
+	color: var(--color-black);
+	border-radius: 8px;
+	cursor: pointer;
+}
+
+.question li:last-of-type {
+	margin-bottom: 20px;
+}
+
+.question li:hover {
+	color: var(--color-black);
+	background: linear-gradient(
+		45deg,
+		var(--color-teal-darker),
+		var(--color-teal-light)
+	);
+	border-radius: 8px;
+	border-color: transparent;
+	transition: all 100ms linear;
+}
+
+.question li:active {
+	transform: translateY(2px);
+}
+
+.question li.correct {
+	-webkit-box-shadow: 0px 0px 44px 3px var(--color-teal-darker);
+	-moz-box-shadow: 0px 0px 44px 3px var(--color-teal-darker);
+	box-shadow: 0px 0px 44px 3px var(--color-teal-darker);
+	background: #2e8b57;
+}
+
+.question li.incorrect {
+	-webkit-box-shadow: 0px 0px 44px 3px var(--color-red);
+	-moz-box-shadow: 0px 0px 44px 3px var(--color-red);
+	box-shadow: 0px 0px 44px 3px var(--color-red);
+	background: var(--color-red);
+}
+.question:hover {
+	background: radial-gradient(circle, var(--color-black) 15%, #0173737c 100%);
+	transition: all 1000ms linear;
+}
+
+li.chosenOption {
+	background: var(--color-teal-darker);
+}
+
+.question_next {
+	width: 70%;
+	color: var(--color-text-light);
+	background-color: #2f2e2e;
+	border: none;
+	outline: none;
+	border-radius: 8px;
+	margin: 10px auto;
+	padding: 20px 20px;
+	font-size: 1.2rem;
+	cursor: pointer;
+}
+
+.question_next:hover {
+	background-color: #4a4a4a;
+}
+
+.question_next:active {
+	transform: translateY(2px);
+}
+
+@media (max-width: 800px) {
+	.question {
+		text-align: center;
+		width: 100%;
+		margin: 10px auto;
+		padding: 10px;
+	}
+
+	.question h3 {
+		padding: 10px;
+		font-size: 1.2rem;
+	}
+
+	.question li {
+		text-align: center;
+		width: 95%;
+		margin: 10px auto;
+		padding: 20px 20px;
+		font-size: 1rem;
+	}
+
+	.question_next {
+		width: 95%;
+	}
+}
+
+@media (min-width: 801px) and (max-width: 1023px){
+	.question li {
+		text-align: center;
+		width: 80%;
+		margin: 10px auto;
+		padding: 20px 20px;
+	}
+
+	.question_next {
+		width: 80%;
+	}
+}
