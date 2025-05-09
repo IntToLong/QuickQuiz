@@ -1,7 +1,7 @@
 .button {
 	border-radius: 8px;
 	padding: 16px 24px;
-	background: linear-gradient(45deg, #017373, #aad9d1);
+	background: linear-gradient(45deg, var(--color-teal-darker), var(--color-teal-light));
 	font-size: 16px;
 	display: flex;
 	align-items: center;
@@ -11,10 +11,11 @@
 	cursor: pointer;
 	border: none;
 	transition: all 0.5s ease;
+	color: var(--color-black);
 }
 
 .button:hover {
-	background: linear-gradient(45deg, #019898, #aad9d1);
+	background: linear-gradient(45deg, #019898, var(--color-teal-light));
 }
 
 .button:active {

@@ -93,3 +93,9 @@
 .answer p {
 	margin: 0.25rem 0;
 }
+
+@media (max-width: 600px) {
+	.summary {
+		width: 95%;
+	}
+}
