@@ -152,6 +152,10 @@
 	-webkit-appearance: none;
 }
 
+.form_option__error {
+	color: var(--color-red-dark);
+}
+
 .form_buttons {
 	display: flex;
 	justify-content: space-between;

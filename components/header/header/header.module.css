@@ -11,7 +11,6 @@
 	margin: 0;
 	padding: 0;
 	display: flex;
-	/* gap: 1.5rem; */
 	font-size: 1.25rem;
 }
 
@@ -25,11 +24,11 @@
 
 .nav a:hover,
 .nav a:active {
-	background: linear-gradient(90deg, #017373, #aad9d1);
+	background: linear-gradient(90deg, var(--color-teal-darker), var(--color-teal-light));
 	background-clip: text;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
-	text-shadow: 0 0 18px #aad9d1;
+	text-shadow: 0 0 18px var(--color-teal-light);
 }
 
 .logo {
@@ -57,7 +56,7 @@
 		padding: 1.5rem 8%;
 	}
 
-	.logo p {
+	.header button {
 		display: none;
 	}
 }

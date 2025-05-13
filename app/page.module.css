@@ -58,8 +58,7 @@
 
 @media (max-width: 599px) {
 	.page {
-		padding: 32px;
-		padding-bottom: 80px;
+		padding: 15px;
 	}
 
 	.hero {

@@ -21,7 +21,7 @@
 	margin: 10px auto;
 	padding: 20px 20px;
 	font-size: 1.2rem;
-	background: linear-gradient(45deg, #aad9d1, #aad9d1);
+	background: linear-gradient(45deg, var(--color-teal-light), var(--color-teal-light));
 	color: var(--color-black);
 	border-radius: 8px;
 	cursor: pointer;

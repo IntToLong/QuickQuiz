@@ -52,12 +52,23 @@ a {
 	text-decoration: none;
 }
 
-ul {
-	list-style: none;
+
+ul, ol {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
 }
 
 li::marker {
 	content: '';
+}
+
+
+li::before,
+li::after,
+li::marker {
+  content: none !important;
+  display: none !important;
 }
 
 @media (prefers-color-scheme: dark) {

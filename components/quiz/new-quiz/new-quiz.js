@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 import { isQuantityValid } from '@/util/validation';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import brain from '@/public/brain-svgrepo-com (1).svg';
+import brain from '@/public/brain-svgrepo.svg';
 import robot from '@/public/robot-svgrepo-com.svg';
 import warningRobot from '@/public/robot-outline-in-a-circle-svgrepo-com.svg';
 import { addQuiz, clearResult, closeModal } from '@/store/quizSlice';
@@ -59,7 +59,7 @@ export default function NewQuiz({ topic }) {
 				signal,
 			}).catch((err) => {
 				setError(true);
-				return 'error';
+				return;
 			});
 
 			if (!response.ok) {
@@ -91,12 +91,11 @@ export default function NewQuiz({ topic }) {
 	function changeCheckedStatus(value) {
 		setChecked((prevV) => value);
 		setQuantityInputValue('');
+		setIsValidQuantity(true);
 	}
 
 	function checkNumberInput(event) {
-		if (!checked) {
-			setIsValidQuantity((prev) => isQuantityValid(event.target.value));
-		}
+		setIsValidQuantity((prev) => isQuantityValid(event.target.value));
 	}
 
 	function handleCancel() {
@@ -136,6 +135,7 @@ export default function NewQuiz({ topic }) {
 	return (
 		<div>
 			<form
+				data-testid='form'
 				onSubmit={handleSubmit}
 				className={styles.form}>
 				{error && (
@@ -173,7 +173,8 @@ export default function NewQuiz({ topic }) {
 					<label
 						htmlFor='topic'
 						className={topicError ? styles.form_topic__error : ''}>
-						Enter your topic: {topicError && <span>*</span>}{' '}
+						Enter your topic:{' '}
+						{topicError && <sup>*at least two syllables long</sup>}{' '}
 					</label>
 					<input
 						type='text'
@@ -187,7 +188,7 @@ export default function NewQuiz({ topic }) {
 				<div className={styles.form_options__wrapper}>
 					<span>Choose difficulty: </span>
 					<div className={styles.form_difficulty}>
-						{DIFFICULTY_LEVELS.map((el) => (
+						{DIFFICULTY_LEVELS.map((el, index) => (
 							<div
 								className={styles.form_difficulty__option}
 								key={el}>
@@ -196,7 +197,7 @@ export default function NewQuiz({ topic }) {
 									id={el}
 									name='complexity'
 									value={el}
-									defaultChecked
+									defaultChecked={index === 0}
 									disabled={pending}
 								/>
 								<label htmlFor={el}>{el[0].toUpperCase() + el.slice(1)}</label>

@@ -1,7 +1,7 @@
 import styles from './status-message.module.css';
 import Image from 'next/image';
 
-export default function StatusMessage({ messages, imgSrc, imgAlt, type }) {
+export default function StatusMessage({ messages, imgSrc, imgAlt, type, ...props }) {
 	return (
 		<div className={type === 'error' ? styles.error : styles.warning}>
 			<Image
