@@ -1,299 +1,308 @@
-// import '@testing-library/jest-dom';
-// import { render, screen, waitFor } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
-// import QuizQuestion from '@/components/quiz/quiz-question/quiz-question';
-// import { Provider, useDispatch } from 'react-redux';
-// import { configureStore as configureMockStore } from 'redux-mock-store';
+import '@testing-library/jest-dom';
+import { render, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import QuizQuestion from '@/components/quiz/quiz-question/quiz-question';
+import { Provider, useDispatch } from 'react-redux';
+import { configureStore as configureMockStore } from 'redux-mock-store';
 
-// jest.mock('react-redux', () => ({
-// 	...jest.requireActual('react-redux'),
-// 	useDispatch: jest.fn(),
-// }));
+jest.mock('react-redux', () => ({
+	...jest.requireActual('react-redux'),
+	useDispatch: jest.fn(),
+}));
 
-// const mockPush = jest.fn();
+const mockPush = jest.fn();
 
-// jest.mock('next/navigation', () => ({
-// 	useRouter: () => ({
-// 		push: mockPush,
-// 	}),
-// 	usePathname: jest.fn(),
-// }));
+jest.mock('next/navigation', () => ({
+	useRouter: () => ({
+		push: mockPush,
+	}),
+	usePathname: jest.fn(),
+}));
 
-// jest.mock('d3-ease', () => ({
-// 	easeQuadInOut: jest.fn(),
-// }));
+jest.mock('d3-ease', () => ({
+	easeQuadInOut: jest.fn(),
+}));
 
-// describe('QuizQuestion', () => {
-// 	const initialState = {
-// 		quiz: {
-// 			quiz: {
-// 				title: 'Basic Math Quiz',
-// 				questions: [
-// 					{
-// 						question: 'What number comes after 5?',
-// 						options: ['3', '4', '6', '7'],
-// 						answer: '6',
-// 						explanation: 'Counting sequentially, 6 follows 5.',
-// 					},
-// 					{
-// 						question: 'What number is bigger than 10?',
-// 						options: ['3', '4', '19', '-11'],
-// 						answer: '19',
-// 						explanation: '19 is bigger than 10.',
-// 					},
-// 				],
-// 			},
-// 			result: [],
-// 			activeModal: false,
-// 		},
-// 	};
-// 	const mockStore = configureMockStore();
-// 	let store;
-// 	let mockDispatch;
-// 	let handleAnswer;
-// 	let showNextQuestion;
+describe('QuizQuestion', () => {
+	const initialState = {
+		quiz: {
+			quiz: {
+				title: 'Basic Math Quiz',
+				questions: [
+					{
+						question: 'What number comes after 5?',
+						options: ['3', '4', '6', '7'],
+						answer: '6',
+						explanation: 'Counting sequentially, 6 follows 5.',
+					},
+					{
+						question: 'What number is bigger than 10?',
+						options: ['3', '4', '19', '-11'],
+						answer: '19',
+						explanation: '19 is bigger than 10.',
+					},
+				],
+			},
+			result: [],
+			activeModal: false,
+		},
+	};
+	const mockStore = configureMockStore();
+	let store;
+	let mockDispatch;
+	let handleAnswer;
 
-// 	beforeEach(() => {
-// 		mockDispatch = jest.fn();
-// 		handleAnswer = jest.fn();
-// 		showNextQuestion = jest.fn();
-// 		store = mockStore(initialState);
-// 		useDispatch.mockReturnValue(mockDispatch);
-// 		// render(
-// 		// 	<Provider store={store}>
-// 		// 		<Quiz />
-// 		// 	</Provider>
-// 		// );
-// 	});
+	beforeEach(() => {
+		mockDispatch = jest.fn();
+		handleAnswer = jest.fn();
 
-// 	afterEach(() => {
-// 		jest.clearAllMocks();
-// 	});
+		store = mockStore(initialState);
+		useDispatch.mockReturnValue(mockDispatch);
+	});
 
-// 	it('renders question component when valid data provided', () => {
-// 		render(
-// 			<Provider store={store}>
-// 				<QuizQuestion
-// 					question={quiz.questions[currentIndex]}
-// 					questionIndex={0}
-// 					single
-// 					showNextQuestion={showNextQuestion}
-// 					quizQuestionsLength={2}
-// 					handleAnswer={handleAnswer}
-// 				/>
-// 			</Provider>
-// 		);
-// 		const heading = screen.getByRole('heading', {
-// 			level: 1,
-// 			name: /Basic Math Quiz/i,
-// 		});
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
 
-// 		expect(heading).toBeInTheDocument();
-// 	});
+	it('renders question component when valid data is provided', () => {
+		render(
+			<Provider store={store}>
+				<QuizQuestion
+					question={{
+						question: 'What number comes after 5?',
+						options: ['3', '4', '6', '7'],
+						answer: '6',
+						explanation: 'Counting sequentially, 6 follows 5.',
+					}}
+					questionIndex={0}
+					showButton
+					isLastQuestion={false}
+					onAnswer={handleAnswer}
+				/>
+			</Provider>
+		);
+		const question = screen.getByTestId('question');
 
-// 	describe('Single question mode', () => {
-// 		it('renders "Show all questions" button', () => {
-// 			const showAllBtn = screen.getByRole('button', {
-// 				name: /show all/i,
-// 			});
+		expect(question).toBeInTheDocument();
+	});
 
-// 			expect(showAllBtn).toBeInTheDocument();
-// 		});
+	it('renders "Next question" button when isLastQuestion prop is false', () => {
+		render(
+			<Provider store={store}>
+				<QuizQuestion
+					question={{
+						question: 'What number comes after 5?',
+						options: ['3', '4', '6', '7'],
+						answer: '6',
+						explanation: 'Counting sequentially, 6 follows 5.',
+					}}
+					questionIndex={0}
+					showButton
+					isLastQuestion={false}
+					onAnswer={handleAnswer}
+				/>
+			</Provider>
+		);
+		const nextBtn = screen.getByRole('button', { name: /next/i });
+		expect(nextBtn).toBeInTheDocument();
+	});
 
-// 		it('renders only the first question in single question mode', () => {
-// 			const showAllBtn = screen.getByRole('button', {
-// 				name: /show all/i,
-// 			});
+	it('renders "Finish quiz" button instead of "Next question" button when isLastQuestion prop is true', async () => {
+		render(
+			<Provider store={store}>
+				<QuizQuestion
+					question={{
+						question: 'What number comes after 5?',
+						options: ['3', '4', '6', '7'],
+						answer: '6',
+						explanation: 'Counting sequentially, 6 follows 5.',
+					}}
+					questionIndex={0}
+					showButton
+					isLastQuestion={true}
+					onAnswer={handleAnswer}
+				/>
+			</Provider>
+		);
+		const nextBtn = screen.queryByRole('button', { name: /next/i });
+		expect(nextBtn).toBeNull();
 
-// 			expect(showAllBtn).toBeInTheDocument();
+		const finishBtn = screen.getByRole('button', { name: /finish/i });
+		expect(finishBtn).toBeInTheDocument();
+	});
 
-// 			const questions = screen.getAllByRole('heading', { level: 3 });
-// 			expect(questions).toHaveLength(1);
-// 		});
+	it('renders component without "Next question" or "Finish quiz" button when showButton prop is not provided', () => {
+		render(
+			<Provider store={store}>
+				<QuizQuestion
+					question={{
+						question: 'What number comes after 5?',
+						options: ['3', '4', '6', '7'],
+						answer: '6',
+						explanation: 'Counting sequentially, 6 follows 5.',
+					}}
+					questionIndex={0}
+					isLastQuestion={false}
+					onAnswer={handleAnswer}
+				/>
+			</Provider>
+		);
+		const nextBtn = screen.queryByRole('button', { name: /next/i });
+		expect(nextBtn).not.toBeInTheDocument();
+		const finishBtn = screen.queryByRole('button', { name: /finish/i });
+		expect(finishBtn).not.toBeInTheDocument();
+	});
 
-// 		it('renders "Next question" button ', () => {
-// 			const nextBtn = screen.getByRole('button', {
-// 				name: /next question/i,
-// 			});
-// 			expect(nextBtn).toBeInTheDocument();
-// 		});
+	it('disables question component when isDisabled is true', () => {
+		render(
+			<Provider store={store}>
+				<QuizQuestion
+					question={{
+						question: 'What number comes after 5?',
+						options: ['3', '4', '6', '7'],
+						answer: '6',
+						explanation: 'Counting sequentially, 6 follows 5.',
+					}}
+					questionIndex={0}
+					showButton
+					isLastQuestion={true}
+					onAnswer={handleAnswer}
+					isDisabled
+				/>
+			</Provider>
+		);
 
-// 		it('changes progress bar text after clicking on "Next question" button', async () => {
-// 			const user = userEvent.setup();
-// 			const progressEl = screen.getByRole('progressbar');
-// 			expect(progressEl).toBeInTheDocument();
+		const questionBlock = screen.getByTestId('question');
+		expect(questionBlock).toHaveClass('disabled');
+	});
 
-// 			const nextBtn = screen.getByRole('button', {
-// 				name: /next question/i,
-// 			});
+	it('answer options don’t respond on click when isDisabled is true', async () => {
+		const user = userEvent.setup();
+		render(
+			<Provider store={store}>
+				<QuizQuestion
+					question={{
+						question: 'What number comes after 5?',
+						options: ['3', '4', '6', '7'],
+						answer: '6',
+						explanation: 'Counting sequentially, 6 follows 5.',
+					}}
+					questionIndex={0}
+					showButton
+					isLastQuestion={true}
+					onAnswer={handleAnswer}
+					isDisabled
+				/>
+			</Provider>
+		);
+		const questionBlock = screen.getByTestId('question');
 
-// 			await user.click(nextBtn);
+		const options = within(questionBlock).getAllByRole('button');
 
-// 			await waitFor(() => {
-// 				const progressText = screen.getByText('2 / 2');
-// 				expect(progressText).toHaveTextContent('2 / 2');
-// 			});
-// 		});
+		for (let option of options) {
+			await user.click(option);
+			expect(handleAnswer).not.toHaveBeenCalled();
+		}
+	});
 
-// 		it('renders "Finish Quiz" button instead of "Next Question" on the last question', async () => {
-// 			const user = userEvent.setup();
+	it('calls onAnswer when an option is clicked and isDisabled is false', async () => {
+		const user = userEvent.setup();
+		render(
+			<Provider store={store}>
+				<QuizQuestion
+					question={{
+						question: 'What number comes after 5?',
+						options: ['3', '4', '6', '7'],
+						answer: '6',
+						explanation: 'Counting sequentially, 6 follows 5.',
+					}}
+					questionIndex={0}
+					showButton
+					isLastQuestion={true}
+					onAnswer={handleAnswer}
+				/>
+			</Provider>
+		);
+		const questionBlock = screen.getByTestId('question');
 
-// 			const nextBtn = screen.getByRole('button', {
-// 				name: /next question/i,
-// 			});
+		const option = within(questionBlock).getByRole('button', { name: '3' });
 
-// 			await user.click(nextBtn);
+		await user.click(option);
 
-// 			await waitFor(() => {
-// 				const progressText = screen.getByText('2 / 2');
-// 				expect(progressText).toHaveTextContent('2 / 2');
-// 				const finishQuizBtns = screen.getAllByText(/finish quiz/i);
-// 				expect(finishQuizBtns).toHaveLength(2);
-// 			});
-// 		});
+		expect(handleAnswer).toHaveBeenCalledTimes(1);
 
-// 		it('shows the next quiz question after user selects an answer', async () => {
-// 			const user = userEvent.setup();
-// 			const option = screen.getByText('3');
-// 			await user.click(option);
+		expect(handleAnswer.mock.calls[0][1]).toBe('3');
+		expect(handleAnswer.mock.calls[0][2]).toBe(0);
+		expect(handleAnswer.mock.calls[0][3]).toEqual({
+			answer: '6',
+			explanation: 'Counting sequentially, 6 follows 5.',
+			options: ['3', '4', '6', '7'],
+			question: 'What number comes after 5?',
+		});
+	});
 
-// 			await waitFor(() => {
-// 				const nextQuestion = screen.getByText(
-// 					/What number is bigger than 10?/i
-// 				);
-// 				expect(nextQuestion).toBeVisible();
-// 			});
-// 		});
-// 	});
+	it('calls onAnswer when "Next question" button is clicked and isDisabled is false', async () => {
+		const user = userEvent.setup();
+		render(
+			<Provider store={store}>
+				<QuizQuestion
+					question={{
+						question: 'What number comes after 5?',
+						options: ['3', '4', '6', '7'],
+						answer: '6',
+						explanation: 'Counting sequentially, 6 follows 5.',
+					}}
+					questionIndex={0}
+					showButton
+					isLastQuestion={false}
+					onAnswer={handleAnswer}
+				/>
+			</Provider>
+		);
+		const nextBtn = screen.getByRole('button', { name: /next/i });
 
-// 	describe('All questions mode', () => {
-// 		it('renders all questions in all questions mode', async () => {
-// 			const user = userEvent.setup();
+		await user.click(nextBtn);
 
-// 			const showAllBtn = screen.getByRole('button', {
-// 				name: /show all/i,
-// 			});
+		expect(handleAnswer).toHaveBeenCalledTimes(1);
 
-// 			await user.click(showAllBtn);
+		expect(handleAnswer.mock.calls[0][1]).toBe('No answer provided.');
+		expect(handleAnswer.mock.calls[0][2]).toBe(0);
+		expect(handleAnswer.mock.calls[0][3]).toEqual({
+			answer: '6',
+			explanation: 'Counting sequentially, 6 follows 5.',
+			options: ['3', '4', '6', '7'],
+			question: 'What number comes after 5?',
+		});
+	});
 
-// 			await waitFor(() => {
-// 				const questions = screen.getAllByRole('heading', { level: 3 });
-// 				expect(questions).toHaveLength(2);
-// 			});
-// 		});
-// 	});
+	it('render selected option with chosenOption class', async () => {
+		render(
+			<Provider store={store}>
+				<QuizQuestion
+					question={{
+						question: 'What number comes after 5?',
+						options: ['3', '4', '6', '7'],
+						answer: '6',
+						explanation: 'Counting sequentially, 6 follows 5.',
+					}}
+					questionIndex={0}
+					isLastQuestion={false}
+					onAnswer={handleAnswer}
+					selectedOption={'4'}
+				/>
+			</Provider>
+		);
 
-// 	it('renders progress bar showing "1/2" on the first question', () => {
-// 		const progressEl = screen.getByRole('progressbar');
-// 		expect(progressEl).toBeInTheDocument();
-// 		const progressText = screen.getByText('1 / 2');
-// 		expect(progressText).toHaveTextContent('1 / 2');
-// 	});
+		const questionBlock = screen.getByTestId('question');
 
-// 	it('changes progress bar text after clicking on answer option', async () => {
-// 		const user = userEvent.setup();
-// 		const progressEl = screen.getByRole('progressbar');
+		const option = within(questionBlock).getByRole('button', { name: '4' });
 
-// 		expect(progressEl).toBeInTheDocument();
+		expect(option).toHaveClass('chosenOption');
 
-// 		const option = screen.getByText('3');
-// 		await user.click(option);
-
-// 		await waitFor(() => {
-// 			const progressText = screen.getByText('2 / 2');
-// 			expect(progressText).toHaveTextContent('2 / 2');
-// 		});
-// 	});
-
-// 	describe('Side effects', () => {
-// 		it('dispatches openModal on clicking "Finish quiz" button below progress bar', async () => {
-// 			const user = userEvent.setup();
-// 			const finishBtns = screen.getAllByRole('button', {
-// 				name: /finish quiz/i,
-// 			});
-// 			await user.click(finishBtns[0]);
-
-// 			expect(mockDispatch).toHaveBeenCalledWith({
-// 				type: 'quiz/openModal',
-// 				payload: 'result',
-// 			});
-// 		});
-
-// 		it('dispatches openModal when answered on all questions', async () => {
-// 			const user = userEvent.setup();
-// 			const optionFirstQuestion = screen.getByText('3');
-// 			await user.click(optionFirstQuestion);
-
-// 			await waitFor(() => {
-// 				const nextQuestion = screen.getByText(
-// 					/What number is bigger than 10?/i
-// 				);
-// 				expect(nextQuestion).toBeVisible();
-// 			});
-
-// 			const optionSecondQuestion = screen.getByText('-11');
-// 			await user.click(optionSecondQuestion);
-// 			expect(mockDispatch).toHaveBeenCalledWith({
-// 				type: 'quiz/openModal',
-// 				payload: 'result',
-// 			});
-// 		});
-
-// 		it('dispatches openModal when clicking the "Next question" button and the "Finish quiz" button below the last question\'s answer options', async () => {
-// 			const user = userEvent.setup();
-// 			const nextBtn = screen.getByRole('button', {
-// 				name: /next question/i,
-// 			});
-// 			await user.click(nextBtn);
-// 			await waitFor(() => {
-// 				const nextQuestion = screen.getByText(
-// 					/What number is bigger than 10?/i
-// 				);
-// 				expect(nextQuestion).toBeVisible();
-// 			});
-
-// 			const finishBtns = screen.getAllByRole('button', {
-// 				name: /finish quiz/i,
-// 			});
-// 			await user.click(finishBtns[1]);
-// 			expect(mockDispatch).toHaveBeenCalledWith({
-// 				type: 'quiz/openModal',
-// 				payload: 'result',
-// 			});
-// 		});
-
-// 		it('dispatches addAnswerToResult for each unanswered question when clicking the "Finish quiz" button below the progress bar', async () => {
-// 			const user = userEvent.setup();
-// 			const finishBtns = screen.getAllByRole('button', {
-// 				name: /finish quiz/i,
-// 			});
-// 			await user.click(finishBtns[0]);
-
-// 			expect(mockDispatch).toHaveBeenCalledWith({
-// 				type: 'quiz/addAnswerToResult',
-// 				payload: {
-// 					answer: '19',
-// 					explanation: '19 is bigger than 10.',
-// 					isCorrect: false,
-// 					options: ['3', '4', '19', '-11'],
-// 					question: 'What number is bigger than 10?',
-// 					questionIndex: 1,
-// 					userAnswer: 'No answer provided.',
-// 				},
-// 			});
-
-// 			expect(mockDispatch).toHaveBeenCalledWith({
-// 				type: 'quiz/addAnswerToResult',
-// 				payload: {
-// 					answer: '6',
-// 					explanation: 'Counting sequentially, 6 follows 5.',
-// 					isCorrect: false,
-// 					options: ['3', '4', '6', '7'],
-// 					question: 'What number comes after 5?',
-// 					questionIndex: 0,
-// 					userAnswer: 'No answer provided.',
-// 				},
-// 			});
-// 		});
-// 	});
-// });
+		const allOptions = within(questionBlock).getAllByRole('button');
+		const chosen = allOptions.filter((btn) =>
+			btn.classList.contains('chosenOption')
+		);
+		expect(chosen).toHaveLength(1);
+	});
+});

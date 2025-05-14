@@ -13,11 +13,18 @@ export default function QuizQuestion({
 	...props
 }) {
 	const [userOption, setUserOption] = useState(selectedOption);
+	const NO_ANSWER = 'No answer provided.';
 
-	function handleUserAnswer(event, option, questionIndex, question) {
+	function handleOptionClick(event, option) {
 		if (isDisabled) return;
 		setUserOption(option);
 		onAnswer(event, option, questionIndex, question);
+	}
+
+	function handleNextClick(event) {
+		if (isDisabled) return;
+		setUserOption(NO_ANSWER);
+		onAnswer(event, NO_ANSWER, questionIndex, question);
 	}
 
 	return (
@@ -37,10 +44,10 @@ export default function QuizQuestion({
 						<li key={`${questionIndex}-${option}`}>
 							<button
 								type='button'
-								onClick={(event) =>
-									handleUserAnswer(event, option, questionIndex, question)
-								}
-								className={userOption === option ? styles.chosenOption : ''}>
+								onClick={(event) => handleOptionClick(event, option)}
+								className={
+									userOption === option ? styles.chosenOption : undefined
+								}>
 								{option}
 							</button>
 						</li>
@@ -51,14 +58,7 @@ export default function QuizQuestion({
 				<div>
 					<button
 						className={styles.question_next}
-						onClick={(event) =>
-							handleUserAnswer(
-								event,
-								'No answer provided.',
-								questionIndex,
-								question
-							)
-						}>
+						onClick={handleNextClick}>
 						{isLastQuestion ? 'Finish quiz' : 'Next question'}
 					</button>
 				</div>
