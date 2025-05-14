@@ -12,7 +12,7 @@ jest.mock('react-redux', () => ({
 }));
 
 describe('GetStartedButton', () => {
-	const initialState = { quiz: {}, result: [], activeModal: false };
+	const initialState = { quiz: {quiz: {}, result: [], activeModal: false }};
 	const mockStore = configureStore();
 	let store;
 	let mockDispatch;

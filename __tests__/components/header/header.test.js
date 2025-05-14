@@ -6,13 +6,12 @@ import { usePathname } from 'next/navigation';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
-
 jest.mock('next/navigation', () => ({
 	usePathname: jest.fn(),
 }));
 
 describe('Header', () => {
-	const initialState = { quiz: {}, result: [], activeModal: false };
+	const initialState = { quiz: { quiz: {}, result: [], activeModal: false } };
 	const mockStore = configureStore();
 	let store;
 
@@ -79,7 +78,8 @@ describe('Header', () => {
 		expect(link.getAttribute('href')).toBe('/');
 	});
 
-	it('renders "Get Started" button if pathname is "/"', async () => { // потрбіно рендерити після зміни пасу, тому що пас змінюється коли компонент уже відображений!! 
+	it('renders "Get Started" button if pathname is "/"', async () => {
+		// потрбіно рендерити після зміни пасу, тому що пас змінюється коли компонент уже відображений!!
 		usePathname.mockReturnValue('/');
 		render(
 			<Provider store={store}>

@@ -21,7 +21,7 @@ jest.mock('next/navigation', () => ({
 }));
 
 describe('NewQuiz', () => {
-	const initialState = { quiz: {}, result: [], activeModal: true };
+	const initialState = { quiz: { quiz: {}, result: [], activeModal: true } };
 	const quiz = {
 		title: 'Basic Math Quiz',
 		questions: [
@@ -293,8 +293,11 @@ describe('NewQuiz', () => {
 
 			await user.type(topicInput, 'test');
 			fireEvent.submit(form);
-			expect(topicLabel).not.toHaveClass('form_topic__error');
-			expect(errorMessage).not.toBeInTheDocument();
+
+			await waitFor(() => {
+				expect(topicLabel).not.toHaveClass('form_topic__error');
+				expect(errorMessage).not.toBeInTheDocument();
+			});
 		});
 
 		it('shows an error style for "Other quantity" input when input <= 0', async () => {

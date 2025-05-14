@@ -10,17 +10,21 @@ export default function QuizQuestion({
 	quizQuestionsLength,
 	handleAnswer,
 	chosenOption,
+	isDisabled,
 	...props
 }) {
 	const [userOption, setUserOption] = useState(chosenOption);
 
 	function handleUserAnswer(event, option, questionIndex, question) {
+		if(isDisabled) return ;
 		setUserOption(option);
 		handleAnswer(event, option, questionIndex, question);
 	}
 
 	return (
-		<li className={styles.question}>
+		<li
+			className={`${styles.question} ${isDisabled ? styles.disabled : ''}`}
+			data-testid='question'>
 			<h3>
 				<span>
 					{questionIndex + 1}

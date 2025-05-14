@@ -15,11 +15,11 @@ jest.mock('next/navigation', () => ({
 }));
 
 describe('InputArea (mocked dispatch)', () => {
-	const initialState = { quiz: {}, result: [], activeModal: false };
+	const initialState = { quiz: { quiz: {}, result: [], activeModal: false } };
 	const mockStore = configureMockStore();
 	let store;
 	let mockDispatch;
-    let user;
+	let user;
 
 	beforeEach(() => {
 		mockDispatch = jest.fn();
@@ -30,7 +30,7 @@ describe('InputArea (mocked dispatch)', () => {
 				<InputArea />
 			</Provider>
 		);
-        user = userEvent.setup();
+		user = userEvent.setup();
 	});
 
 	afterEach(() => {

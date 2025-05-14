@@ -12,7 +12,6 @@ import useQuizStats from '@/hooks/useQuizStats';
 import NewQuiz from '@/components/quiz/new-quiz/new-quiz';
 
 import ShortResult from '@/components/result/short-result/short-result';
-import { redirect } from 'next/navigation';
 
 export default function Quiz() {
 	const router = useRouter();
@@ -24,9 +23,6 @@ export default function Quiz() {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const { result, quiz, correct, incorrect, percentage } = useQuizStats();
 	const isQuiz = Object.keys(quiz).length > 0;
-	const indexesInResult = result
-		.map((el) => el.questionIndex)
-		.sort((a, b) => a - b);
 
 	useEffect(() => {
 		setCurrentIndex(0);
@@ -97,7 +93,7 @@ export default function Quiz() {
 			if (answeredQuestion) {
 				continue;
 			}
-			console.log(quiz.questions[i]);
+
 			handleAnswer(null, 'No answer provided.', i, quiz.questions[i]);
 		}
 		dispatch(openModal('result'));
@@ -177,9 +173,7 @@ export default function Quiz() {
 										appear={true}
 										in={showAll}
 										unmountOnExit>
-										<div
-											ref={nodeRefs.current[index]}
-											className={answeredQuestion ? styles.disabled : ''}>
+										<div ref={nodeRefs.current[index]}>
 											<QuizQuestion
 												question={question}
 												questionIndex={index}
@@ -187,6 +181,7 @@ export default function Quiz() {
 												chosenOption={
 													answeredQuestion ? answeredQuestion.userAnswer : null
 												}
+												isDisabled={!!answeredQuestion}
 											/>
 										</div>
 									</CSSTransition>
