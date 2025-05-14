@@ -1,4 +1,3 @@
-import React from 'react';
 import '@testing-library/jest-dom';
 import Button from '@/components/ui/button/button';
 import { render, screen, within } from '@testing-library/react';
