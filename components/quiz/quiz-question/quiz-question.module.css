@@ -40,11 +40,7 @@
 	height: 100%;
 	font-size: 1.2rem;
 	padding: 20px 20px;
-	background: linear-gradient(
-		45deg,
-		var(--color-teal-light),
-		var(--color-teal-light)
-	);
+	background: transparent;
 	color: var(--color-black);
 	cursor: pointer;
 	border-radius: 8px;
@@ -54,7 +50,7 @@
 	margin-bottom: 20px;
 }
 
-.question li button:hover {
+.question li:hover {
 	color: var(--color-black);
 	background: linear-gradient(
 		45deg,
@@ -75,7 +71,7 @@
 	transition: all 1000ms linear;
 }
 
-li.chosenOption {
+.question li button.chosenOption {
 	background: var(--color-teal-darker);
 }
 
