@@ -149,10 +149,9 @@ export default function Quiz() {
 								<QuizQuestion
 									question={quiz.questions[currentIndex]}
 									questionIndex={currentIndex}
-									single
-									showNextQuestion={showNextQuestion}
-									quizQuestionsLength={quizQuestionsLength}
-									handleAnswer={handleAnswer}
+									showButton
+									onAnswer={handleAnswer}
+									isLastQuestion={currentIndex === quizQuestionsLength - 1}
 								/>
 							</div>
 						</CSSTransition>
@@ -177,8 +176,8 @@ export default function Quiz() {
 											<QuizQuestion
 												question={question}
 												questionIndex={index}
-												handleAnswer={handleAnswer}
-												chosenOption={
+												onAnswer={handleAnswer}
+												selectedOption={
 													answeredQuestion ? answeredQuestion.userAnswer : null
 												}
 												isDisabled={!!answeredQuestion}

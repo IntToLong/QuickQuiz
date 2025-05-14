@@ -5,20 +5,19 @@ import { useState } from 'react';
 export default function QuizQuestion({
 	question,
 	questionIndex,
-	single,
-	showNextQuestion,
-	quizQuestionsLength,
-	handleAnswer,
-	chosenOption,
+	showButton,
+	onAnswer,
+	selectedOption,
 	isDisabled,
+	isLastQuestion,
 	...props
 }) {
-	const [userOption, setUserOption] = useState(chosenOption);
+	const [userOption, setUserOption] = useState(selectedOption);
 
 	function handleUserAnswer(event, option, questionIndex, question) {
-		if(isDisabled) return ;
+		if (isDisabled) return;
 		setUserOption(option);
-		handleAnswer(event, option, questionIndex, question);
+		onAnswer(event, option, questionIndex, question);
 	}
 
 	return (
@@ -33,22 +32,22 @@ export default function QuizQuestion({
 				{question.question}
 			</h3>
 			<ul>
-				{question?.options?.map((option, optionIndex) => {
+				{question?.options?.map((option) => {
 					return (
-						<li
-							role='button'
-							tabIndex={0}
-							key={option + questionIndex}
-							onClick={(event) =>
-								handleUserAnswer(event, option, questionIndex, question)
-							}
-							className={userOption === option ? styles.chosenOption : ''}>
-							{option}
+						<li key={`${questionIndex}-${option}`}>
+							<button
+								type='button'
+								onClick={(event) =>
+									handleUserAnswer(event, option, questionIndex, question)
+								}
+								className={userOption === option ? styles.chosenOption : ''}>
+								{option}
+							</button>
 						</li>
 					);
 				})}
 			</ul>
-			{single && (
+			{showButton && (
 				<div>
 					<button
 						className={styles.question_next}
@@ -60,9 +59,7 @@ export default function QuizQuestion({
 								question
 							)
 						}>
-						{quizQuestionsLength - 1 !== questionIndex
-							? 'Next question'
-							: 'Finish quiz'}
+						{isLastQuestion ? 'Finish quiz' : 'Next question'}
 					</button>
 				</div>
 			)}
