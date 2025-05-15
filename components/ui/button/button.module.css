@@ -18,7 +18,7 @@
 	background: linear-gradient(45deg, #019898, var(--color-teal-light));
 }
 
-.button:active {
+.button:enabled:active {
 	transform: translateY(2px);
 }
 
