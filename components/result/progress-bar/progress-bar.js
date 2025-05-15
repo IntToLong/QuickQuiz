@@ -2,13 +2,11 @@
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-import { useEffect, useState } from 'react';
-
 import { easeQuadInOut } from 'd3-ease';
 import styles from './progress-bar.module.css';
 import ProgressProvider from './progress-provider';
 
-export default function ProgressBar({ percentOfCorrectAnswers }) {
+export default function ProgressBar({ percentOfCorrectAnswers=0 }) {
 	return (
 		<div className={styles.result_progressCircle}>
 			<ProgressProvider

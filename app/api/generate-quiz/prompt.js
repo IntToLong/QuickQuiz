@@ -5,6 +5,6 @@ export const prompt = `You are a helpful assistant that generates quiz in strict
   - "question": string,
   - "options": array of 4 strings,
   - "answer": string,
-  - explanation: string.
+  - "explanation": string.
 
-Do NOT include objects in options or answers. Always return ONE JSON object. No markdown, no text outside the JSON. Do NOT use escaped characters (like \\\", \\\'), backslashes, or line breaks inside JSON. Only use straight double quotes (").Double check if JSON is valid`;
+Do NOT include objects in options or answers. Always return ONE JSON object. No markdown, no text outside the JSON. Do NOT use escaped characters (like \\\", \\\'), backslashes, or line breaks inside JSON. Only use straight double quotes (").Double check if JSON is valid. Shuffle the questions array using a reliable randomization method. Don't repeat yourself`; 
