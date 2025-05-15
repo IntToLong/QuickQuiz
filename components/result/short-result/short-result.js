@@ -22,7 +22,7 @@ export default function ShortResult({
 		router.push('/');
 	}
 
-	function toggleSummary() {
+	function openSummary() {
 		router.push('/quiz/result');
 	}
 
@@ -37,7 +37,7 @@ export default function ShortResult({
 				/>
 			</div>
 			<div className={styles.buttons}>
-				<DarkButton onClick={toggleSummary}>See Details</DarkButton>
+				<DarkButton onClick={openSummary}>See Details</DarkButton>
 				<DarkButton onClick={openNewQuiz}>New Quiz</DarkButton>
 			</div>
 		</div>
