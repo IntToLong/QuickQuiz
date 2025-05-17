@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import quizReducer from '@/store/quizSlice';
@@ -53,7 +53,7 @@ describe('Modal', () => {
 		expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
 	});
 
-	it('calls closeModal and redirects on dialog close for "result"', () => {
+	it('calls closeModal and redirects on dialog close for "result"', async () => {
 		render(
 			<Provider store={store}>
 				<Modal modalType='result'>Test Content</Modal>
@@ -64,9 +64,10 @@ describe('Modal', () => {
 
 		dialog.close = jest.fn();
 
-		dialog.dispatchEvent(new Event('close'));
-
-		expect(store.getState().quiz.activeModal).toBeFalsy();
-		expect(pushMock).toHaveBeenCalledWith('/');
+		await waitFor(() => {
+			dialog.dispatchEvent(new Event('close'));
+			expect(store.getState().quiz.activeModal).toBeFalsy();
+			expect(pushMock).toHaveBeenCalledWith('/');
+		});
 	});
 });
