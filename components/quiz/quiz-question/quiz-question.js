@@ -28,7 +28,7 @@ export default function QuizQuestion({
 	}
 
 	return (
-		<li
+		<section
 			className={`${styles.question} ${isDisabled ? styles.disabled : ''}`}
 			data-testid='question'>
 			<h3>
@@ -63,6 +63,6 @@ export default function QuizQuestion({
 					</button>
 				</div>
 			)}
-		</li>
+		</section>
 	);
 }

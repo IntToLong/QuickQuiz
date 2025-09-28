@@ -116,6 +116,7 @@
 .form_radio__option input[type='radio']:checked {
 	border: 7px solid var(--color-teal-dark);
 	appearance: none;
+	-webkit-appearance: none;
 }
 
 .form_radio__option input[type='radio']:checked + label {

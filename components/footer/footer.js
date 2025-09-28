@@ -6,12 +6,14 @@ import facebook from '@/public/facebook.svg';
 import linkedin from '@/public/linkedin.svg';
 
 import styles from './footer.module.css';
+import { getCurrentYear } from '../../util/getCurrentYear';
 
 export default function Footer() {
+	const currentYear = getCurrentYear();
 	return (
 		<footer className={styles.footer}>
 			<p className={styles.copyright}>
-				&#169; 2025 QuickQuiz AI. All Rights Reserved.
+				&#169; {currentYear} QuickQuiz AI. All Rights Reserved.
 			</p>
 			<ul className={styles.socialMedia}>
 				<li className={styles.socialMedia_icon}>
