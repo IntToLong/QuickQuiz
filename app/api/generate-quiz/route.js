@@ -7,7 +7,6 @@ const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 export async function POST(req) {
 	let { topic, complexity, quantity } = await req.json();
-	console.log(typeof quantity);
 
 	if (quantity > 20) {
 		quantity = 20;
@@ -15,11 +14,11 @@ export async function POST(req) {
 
 	try {
 		const response = await ai.models.generateContent({
-			model: 'gemini-2.0-flash-lite',
+			model: 'gemini-2.5-flash-lite',
 			temperature: getRandomTemperature(),
 			topP: 0.95,
 			topK: 64,
-			maxOutputTokens: 4096,
+			maxOutputTokens: 1200,
 			responseMimeType: 'text/plain',
 			contents: `Generate quiz - exactly ${
 				quantity ?? 5
@@ -29,7 +28,6 @@ export async function POST(req) {
 		});
 
 		const raw = response.text;
-		console.log(raw);
 
 		const result = safeParseJSON(raw, +quantity ?? 5);
 

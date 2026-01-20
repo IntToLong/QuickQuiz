@@ -27,7 +27,9 @@ export default function Footer() {
 					</a>
 				</li>
 				<li className={styles.socialMedia_icon}>
-					<a href='#'>
+					<a
+						href='https://www.linkedin.com/in/nataliia-luibynets/'
+						target='_blank'>
 						<Image
 							src={linkedin}
 							width='20'

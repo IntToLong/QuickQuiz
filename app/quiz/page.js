@@ -127,7 +127,7 @@ export default function Quiz() {
 							<button
 								className={styles.quiz_button}
 								onClick={toggleQuestionsView}>
-								{showAll ? 'Single Question View' : 'Show all questions'}
+								{showAll ? 'Single question view' : 'Show all questions'}
 							</button>
 							<button
 								className={styles.quiz_button}
