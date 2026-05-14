@@ -35,6 +35,10 @@ const quizSlice = createSlice({
 		closeModal(state) {
 			state.activeModal = null;
 		},
+
+		completeQuiz: () => {
+			// No state mutation — exists as a persistence signal handled by middleware.
+		},
 	},
 });
 
@@ -45,6 +49,7 @@ export const {
 	clearResult,
 	openModal,
 	closeModal,
+	completeQuiz,
 } = quizSlice.actions;
 
 export default quizSlice.reducer;

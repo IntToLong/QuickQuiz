@@ -4,7 +4,7 @@ import { useState, useRef, createRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
-import { addAnswerToResult, openModal } from '@/store/quizSlice';
+import { addAnswerToResult, openModal, completeQuiz } from '@/store/quizSlice';
 import QuizQuestion from '@/components/quiz/quiz-question/quiz-question';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Modal from '@/components/ui/modal/modal';
@@ -20,19 +20,15 @@ export default function Quiz() {
 	const nodeRef = useRef();
 	const [showAll, setShowAll] = useState(false);
 	const [modalType, setModalType] = useState(null);
-	const [currentIndex, setCurrentIndex] = useState(0);
 	const { result, quiz, correct, incorrect, percentage } = useQuizStats();
 	const isQuiz = Object.keys(quiz).length > 0;
-
-	useEffect(() => {
-		setCurrentIndex(0);
-	}, [quiz]);
+	const currentIndex = result.length;
 
 	useEffect(() => {
 		if (!isQuiz) {
 			router.push('/');
 		}
-	}, [isQuiz]);
+	}, [isQuiz, router]);
 
 	useEffect(() => {
 		nodeRefs.current = quiz.questions?.map(() => createRef()) || [];
@@ -77,10 +73,9 @@ export default function Quiz() {
 	}
 
 	function showNextQuestion() {
-		if (currentIndex < quizQuestionsLength - 1) {
-			setCurrentIndex((prev) => prev + 1);
-		} else {
+		if (result.length === quizQuestionsLength) {
 			dispatch(openModal('result'));
+			dispatch(completeQuiz());
 			setModalType('result');
 		}
 	}
@@ -97,6 +92,7 @@ export default function Quiz() {
 			handleAnswer(null, 'No answer provided.', i, quiz.questions[i]);
 		}
 		dispatch(openModal('result'));
+		dispatch(completeQuiz());
 		setModalType('result');
 	}
 
@@ -105,91 +101,89 @@ export default function Quiz() {
 		setTimeout(() => dispatch(openModal('newQuiz')), 300);
 	}
 
-	return (
+	return isQuiz ? (
 		<div className={styles.wrapper}>
-			{isQuiz > 0 && (
-				<div className={styles.quiz}>
-					<header className={styles.quiz_header}>
-						<h1>{quiz.title}</h1>
+			<div className={styles.quiz}>
+				<header className={styles.quiz_header}>
+					<h1>{quiz.title}</h1>
 
-						<section className={styles.quiz_progress}>
-							<p>
-								{currentIndex + 1} / {quizQuestionsLength}
-							</p>
-							<progress
-								max={quizQuestionsLength}
-								value={currentIndex + 1}>
-								{currentIndex + 1}
-							</progress>
-						</section>
+					<section className={styles.quiz_progress}>
+						<p>
+							{currentIndex + 1} / {quizQuestionsLength}
+						</p>
+						<progress
+							max={quizQuestionsLength}
+							value={currentIndex + 1}>
+							{currentIndex + 1}
+						</progress>
+					</section>
 
-						<div className={styles.quiz_buttons}>
-							<button
-								className={styles.quiz_button}
-								onClick={toggleQuestionsView}>
-								{showAll ? 'Single question view' : 'Show all questions'}
-							</button>
-							<button
-								className={styles.quiz_button}
-								onClick={finishQuiz}>
-								Finish quiz
-							</button>
-						</div>
-					</header>
-
-					<div>
-						<CSSTransition
-							key={currentIndex}
-							nodeRef={nodeRef}
-							timeout={300}
-							in={!showAll}
-							unmountOnExit
-							classNames='questionTransition'>
-							<div ref={nodeRef}>
-								<QuizQuestion
-									question={quiz.questions[currentIndex]}
-									questionIndex={currentIndex}
-									showButton
-									onAnswer={handleAnswer}
-									isLastQuestion={currentIndex === quizQuestionsLength - 1}
-								/>
-							</div>
-						</CSSTransition>
+					<div className={styles.quiz_buttons}>
+						<button
+							className={styles.quiz_button}
+							onClick={toggleQuestionsView}>
+							{showAll ? 'Single question view' : 'Show all questions'}
+						</button>
+						<button
+							className={styles.quiz_button}
+							onClick={finishQuiz}>
+							Finish quiz
+						</button>
 					</div>
+				</header>
 
-					{showAll && (
-						<TransitionGroup className={styles.questionContainer}>
-							{quiz.questions.map((question, index) => {
-								const answeredQuestion = result.find(
-									(el) => el.questionIndex === index
-								);
-								return (
-									<CSSTransition
-										key={index}
-										nodeRef={nodeRefs.current[index]}
-										timeout={600}
-										classNames='questionTransition'
-										appear={true}
-										in={showAll}
-										unmountOnExit>
-										<div ref={nodeRefs.current[index]}>
-											<QuizQuestion
-												question={question}
-												questionIndex={index}
-												onAnswer={handleAnswer}
-												selectedOption={
-													answeredQuestion ? answeredQuestion.userAnswer : null
-												}
-												isDisabled={!!answeredQuestion}
-											/>
-										</div>
-									</CSSTransition>
-								);
-							})}
-						</TransitionGroup>
-					)}
+				<div>
+					<CSSTransition
+						key={currentIndex}
+						nodeRef={nodeRef}
+						timeout={300}
+						in={!showAll}
+						unmountOnExit
+						classNames='questionTransition'>
+						<div ref={nodeRef}>
+							<QuizQuestion
+								question={quiz.questions[currentIndex]}
+								questionIndex={currentIndex}
+								showButton
+								onAnswer={handleAnswer}
+								isLastQuestion={currentIndex === quizQuestionsLength - 1}
+							/>
+						</div>
+					</CSSTransition>
 				</div>
-			)}
+
+				{showAll && (
+					<TransitionGroup className={styles.questionContainer}>
+						{quiz.questions.map((question, index) => {
+							const answeredQuestion = result.find(
+								(el) => el.questionIndex === index
+							);
+							return (
+								<CSSTransition
+									key={index}
+									nodeRef={nodeRefs.current[index]}
+									timeout={600}
+									classNames='questionTransition'
+									appear={true}
+									in={showAll}
+									unmountOnExit>
+									<div ref={nodeRefs.current[index]}>
+										<QuizQuestion
+											question={question}
+											questionIndex={index}
+											onAnswer={handleAnswer}
+											selectedOption={
+												answeredQuestion ? answeredQuestion.userAnswer : null
+											}
+											isDisabled={!!answeredQuestion}
+										/>
+									</div>
+								</CSSTransition>
+							);
+						})}
+					</TransitionGroup>
+				)}
+			</div>
 
 			<Modal modalType={modalType}>
 				{modalType === 'result' && (
@@ -203,5 +197,5 @@ export default function Quiz() {
 				{modalType === 'newQuiz' && <NewQuiz />}
 			</Modal>
 		</div>
-	);
+	) : null;
 }

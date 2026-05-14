@@ -5,6 +5,7 @@ import reducer, {
 	clearResult,
 	openModal,
 	closeModal,
+	completeQuiz,
 } from '@/store/quizSlice';
 
 test('should return the initial state', () => {
@@ -165,4 +166,14 @@ test('should handle reset activeModal', () => {
 		result: [],
 		activeModal: null,
 	});
+});
+
+test('should handle completeQuiz (no-op on state)', () => {
+	const previousState = {
+		quiz: { title: 'Test' },
+		result: [{ questionIndex: 0, isCorrect: true }],
+		activeModal: 'result',
+	};
+
+	expect(reducer(previousState, completeQuiz())).toEqual(previousState);
 });

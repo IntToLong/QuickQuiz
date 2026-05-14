@@ -28,7 +28,9 @@ export default function Modal({ children, modalType, ...props }) {
 		} else {
 			if (modal.open) modal.close();
 		}
-		return () => modal.close();
+		return () => {
+			if (modal.open) modal.close();
+		};
 	}, [activeModal, modalType]);
 
 	if (!modalRoot) return null;
